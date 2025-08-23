@@ -80,6 +80,14 @@ jobs:
           brew update
           brew install utf8proc
 
+      - name: Install GCC 13
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++-13
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+
       - name: Configure CMake (Windows and Linux)
         if: matrix.os != 'macos-latest'
         shell: bash
