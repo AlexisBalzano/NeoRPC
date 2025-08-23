@@ -36,18 +36,14 @@ void NeoRPC::Initialize(const PluginMetadata &metadata, CoreAPI *coreAPI, Client
     try
     {
         this->RegisterCommand();
-        discordSetup();
-        discord::RPCManager::get().initialize();
-
         initialized_ = true;
     }
     catch (const std::exception &e)
     {
         logger_->error("Failed to initialize NeoRPC: " + std::string(e.what()));
     }
-
-    this->m_stop = false;
-    this->m_worker = std::thread(&NeoRPC::run, this);
+	m_stop = false;
+	m_thread = std::thread(&NeoRPC::run, this);
 }
 
 void NeoRPC::Shutdown()
@@ -55,13 +51,12 @@ void NeoRPC::Shutdown()
     if (initialized_)
     {
         initialized_ = false;
-		discord::RPCManager::get().shutdown();
         this->unegisterCommand();
         LOG_DEBUG(Logger::LogLevel::Info, "NeoRPC shutdown complete");
     }
-
-    this->m_stop = true;
-	if (m_worker.joinable()) this->m_worker.join();
+	m_stop = true;
+    if (m_thread.joinable())
+		m_thread.join();
 }
 
 void rpc::NeoRPC::Reset()
@@ -109,22 +104,29 @@ void rpc::NeoRPC::updatePresence()
         return;
     }
 
+    std::string controller;
+	std::string state;
+
+    if (isControllerATC_) {
+        state = "Aircraft tracked: (" + std::to_string(aircraftTracked_) + " of " + std::to_string(totalTracks_) + ")";
+        controller = "Controlling " + currentController_ + " " + currentFrequency_;
+        rpc.getPresence().setSmallImageKey("radarlogo");
+    }
+    else {
+        state = "Idling";
+        controller = "Looking for traffic";
+    }
+
     rpc.getPresence()
-        .setState("Idling")
+        .setState(state)
         .setActivityType(discord::ActivityType::Game)
-        .setStatusDisplayType(discord::StatusDisplayType::State)
-        .setDetails("Testing")
+        .setStatusDisplayType(discord::StatusDisplayType::Name)
+        .setDetails(controller)
         .setStartTimestamp(StartTime)
-        .setEndTimestamp(time(nullptr) + 5 * 60)
-        .setLargeImageKey("logo")
-        .setSmallImageKey("radarlogo")
-        .setPartyID("party1234")
-        .setPartySize(1)
-        .setPartyMax(6)
-        .setPartyPrivacy(discord::PartyPrivacy::Public)
-        .setButton1("Click me!", "https://google.com/")
-        .setButton2("Dont click me!", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-        .setInstance(false)
+        .setLargeImageKey("main")
+        .setLargeImageText("French vACC")
+        .setSmallImageText(std::to_string(totalTracks_))
+        .setInstance(true)
         .refresh();
 }
 
@@ -200,11 +202,18 @@ void rpc::NeoRPC::OnFlightplanRemoved(const Flightplan::FlightplanRemovedEvent* 
 
 void NeoRPC::run() {
     int counter = 1;
+    discordSetup();
+    discord::RPCManager::get().initialize();
+    auto& rpc = discord::RPCManager::get();
+
     while (true) {
         counter += 1;
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-        if (true == this->m_stop) return;
+        if (true == this->m_stop) {
+            discord::RPCManager::get().shutdown();
+            return;
+        }
         
         this->OnTimer(counter);
     }

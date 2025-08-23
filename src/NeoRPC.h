@@ -76,9 +76,17 @@ namespace rpc {
     private:
         // Plugin state
         bool initialized_ = false;
-        std::thread m_worker;
+		bool m_stop;
 		bool m_presence = true; // Send presence to Discord
-        bool m_stop;
+		std::thread m_thread;
+
+		bool isControllerATC_ = false;
+        std::string currentController_ = "LFMN APP";
+        std::string currentFrequency_ = "134.475";
+        
+		uint32_t totalTracks_ = 25;
+		uint32_t totalFlightplans_ = 8;
+		uint32_t aircraftTracked_ = 2;
 
         // APIs
         PluginMetadata metadata_;
