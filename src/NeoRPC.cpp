@@ -137,7 +137,6 @@ void rpc::NeoRPC::updateData()
 
     auto connectionData = fsdAPI_->getConnection();
     if (connectionData) {
-		StartTime = std::time(nullptr); // Reset uptime on connection change
         if (connectionData->facility != Fsd::NetworkFacility::OBS) {
             isControllerATC_ = true;
             isObserver_ = false;
