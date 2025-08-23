@@ -61,7 +61,7 @@ void NeoRPC::Shutdown()
     this->unegisterCommand();
 }
 
-void vsid::NeoRPC::Reset()
+void rpc::NeoRPC::Reset()
 {
 }
 
@@ -82,7 +82,7 @@ void NeoRPC::OnTimer(int Counter) {
     if (Counter % 5 == 0) this->runScopeUpdate();
 }
 
-void vsid::NeoRPC::OnControllerDataUpdated(const ControllerData::ControllerDataUpdatedEvent* event)
+void rpc::NeoRPC::OnControllerDataUpdated(const ControllerData::ControllerDataUpdatedEvent* event)
 {
     if (!event || event->callsign.empty())
         return;
@@ -92,11 +92,6 @@ void vsid::NeoRPC::OnControllerDataUpdated(const ControllerData::ControllerDataU
         return;
     }
     else {
-        std::string request = getRequestAndIndex(event->callsign).first;
-        if ((request == "clearance" && controllerDataBlock->clearanceIssued)
-            || (request == "push" && controllerDataBlock->groundStatus == ControllerData::GroundStatus::Push)
-            || (request == "taxi" && controllerDataBlock->groundStatus == ControllerData::GroundStatus::Taxi)) {
-        }
 
     }
 }
@@ -105,7 +100,7 @@ void NeoRPC::OnAirportConfigurationsUpdated(const Airport::AirportConfigurations
 	LOG_DEBUG(Logger::LogLevel::Info, "Airport configurations updated.");
 }
 
-void vsid::NeoRPC::OnAircraftTemporaryAltitudeChanged(const ControllerData::AircraftTemporaryAltitudeChangedEvent* event)
+void rpc::NeoRPC::OnAircraftTemporaryAltitudeChanged(const ControllerData::AircraftTemporaryAltitudeChangedEvent* event)
 {
     if (!event || event->callsign.empty())
         return;
@@ -119,7 +114,7 @@ void vsid::NeoRPC::OnAircraftTemporaryAltitudeChanged(const ControllerData::Airc
 	}
 }
 
-void vsid::NeoRPC::OnPositionUpdate(const Aircraft::PositionUpdateEvent* event)
+void rpc::NeoRPC::OnPositionUpdate(const Aircraft::PositionUpdateEvent* event)
 {
     for (const auto& aircraft : event->aircrafts) {
         if (aircraft.callsign.empty())
@@ -127,7 +122,7 @@ void vsid::NeoRPC::OnPositionUpdate(const Aircraft::PositionUpdateEvent* event)
 	}
 }
 
-void vsid::NeoRPC::OnFlightplanUpdated(const Flightplan::FlightplanUpdatedEvent* event)
+void rpc::NeoRPC::OnFlightplanUpdated(const Flightplan::FlightplanUpdatedEvent* event)
 {
     if (!event || event->callsign.empty())
         return;
@@ -142,7 +137,7 @@ void vsid::NeoRPC::OnFlightplanUpdated(const Flightplan::FlightplanUpdatedEvent*
 }
 
 
-void vsid::NeoRPC::OnFlightplanRemoved(const Flightplan::FlightplanRemovedEvent* event)
+void rpc::NeoRPC::OnFlightplanRemoved(const Flightplan::FlightplanRemovedEvent* event)
 {
     if (!event || event->callsign.empty())
         return;

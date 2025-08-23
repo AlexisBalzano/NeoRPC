@@ -56,7 +56,7 @@ Chat::CommandResult NeoRPCCommandProvider::Execute( const std::string &commandId
     }
     else {
         std::string error = "Invalid command. Use .rpc <command> <param>";
-        neoVSID_->DisplayMessage(error);
+        neoRPC_->DisplayMessage(error);
         return { false, error };
     }
 

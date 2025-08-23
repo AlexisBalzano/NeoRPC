@@ -37,8 +37,8 @@ namespace rpc {
 
         // Command handling
         void TagProcessing(const std::string& callsign, const std::string& actionId, const std::string& userInput = "");
-        bool getAutoModeState() const { return autoModeState; }
-        void switchAutoModeState() { autoModeState = !autoModeState; }
+        void RegisterCommand();
+        void unegisterCommand();
 
 		// API Accessors
         PluginSDK::Logger::LoggerAPI* GetLogger() const { return logger_; }
@@ -77,7 +77,7 @@ namespace rpc {
         PluginSDK::Logger::LoggerAPI* logger_ = nullptr;
         PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
         Tag::TagInterface* tagInterface_ = nullptr;
-        std::shared_ptr<NeoVSIDCommandProvider> CommandProvider_;
+        std::shared_ptr<NeoRPCCommandProvider> CommandProvider_;
 
     };
 } // namespace rpc
