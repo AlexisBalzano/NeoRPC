@@ -1,7 +1,6 @@
 #include "NeoRPC.h"
 #include <numeric>
 #include <chrono>
-#include <random>
 
 #include "Version.h"
 #include "core/CompileCommands.h"
@@ -87,9 +86,9 @@ void rpc::NeoRPC::discordSetup()
             });
 }
 
-void rpc::NeoRPC::changeIdlingText()
+void rpc::NeoRPC::changeIdlingText(const int& counter)
 {
-    static constexpr std::array<std::string_view, 20> idlingTexts = {
+    static constexpr std::array<std::string_view, 21> idlingTexts = {
         "Waiting for traffic",
         "Monitoring frequencies",
         "Checking FL5000 for conflicts",
@@ -112,10 +111,8 @@ void rpc::NeoRPC::changeIdlingText()
         "Trying to contact UNICOM",
         "Arguing that France is not on strike"
     };
-    static thread_local std::mt19937 rng{ std::random_device{}() };
-    std::uniform_int_distribution<size_t> dist(0, idlingTexts.size() - 1);
 
-    idlingText_ = std::string(idlingTexts[dist(rng)]);
+    idlingText_ = std::string(idlingTexts[counter % idlingTexts.size()-1]);
 }
 
 void rpc::NeoRPC::updatePresence()
@@ -227,7 +224,7 @@ void NeoRPC::OnTimer(int Counter) {
     if (Counter % 5 == 0) // Every 5 seconds
         updateData();
     if (Counter % 15 == 0) // Every 15 seconds
-        changeIdlingText();
+        changeIdlingText(Counter);
     this->runUpdate();
 }
 

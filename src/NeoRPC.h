@@ -61,7 +61,7 @@ namespace rpc {
 
     private:
         void discordSetup();
-        void changeIdlingText();
+        void changeIdlingText(const int& counter);
 		void updatePresence();
 		void updateData();
         void runUpdate();
