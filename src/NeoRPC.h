@@ -64,6 +64,7 @@ namespace rpc {
     private:
         void discordSetup();
 		void updatePresence();
+		void updateData();
         void runUpdate();
         void run();
 
@@ -81,12 +82,12 @@ namespace rpc {
 		std::thread m_thread;
 
 		bool isControllerATC_ = false;
-        std::string currentController_ = "LFMN APP";
-        std::string currentFrequency_ = "134.475";
+        std::string currentController_ = "";
+        std::string currentFrequency_ = "";
         
-		uint32_t totalTracks_ = 25;
-		uint32_t totalAircrafts_ = 8;
-		uint32_t aircraftTracked_ = 2;
+		uint32_t totalTracks_ = 0;
+		uint32_t totalAircrafts_ = 0;
+		uint32_t aircraftTracked_ = 0;
 
         // APIs
         PluginMetadata metadata_;

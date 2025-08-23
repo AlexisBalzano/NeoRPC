@@ -112,6 +112,9 @@ void rpc::NeoRPC::updatePresence()
         controller = "Controlling " + currentController_ + " " + currentFrequency_;
         rpc.getPresence().setSmallImageKey("radarlogo");
     }
+    else {
+        rpc.getPresence().setSmallImageKey("");
+    }
 
     rpc.getPresence()
         .setState(state)
@@ -121,9 +124,44 @@ void rpc::NeoRPC::updatePresence()
         .setStartTimestamp(StartTime)
         .setLargeImageKey("main")
         .setLargeImageText("French vACC")
-        .setSmallImageText(std::to_string(totalTracks_))
+        .setSmallImageText("Total Tracks: " + std::to_string(totalTracks_))
         .setInstance(true)
         .refresh();
+}
+
+void rpc::NeoRPC::updateData()
+{
+    isControllerATC_ = false;
+    currentController_ = "";
+    currentFrequency_ = "";
+
+    auto connectionData = fsdAPI_->getConnection();
+    if (connectionData) {
+        if (connectionData->facility != Fsd::NetworkFacility::OBS) isControllerATC_ = true;
+        else isControllerATC_ = false;
+
+        currentController_ = connectionData->callsign;
+        if (connectionData->frequencies.empty()) currentFrequency_ = "";
+        else {
+			std::string freq = std::to_string(connectionData->frequencies[0]);
+			currentFrequency_ = freq.substr(0, freq.length() - 6) + "." + freq.substr(freq.length() - 6, 3);
+        }
+    }
+
+    totalAircrafts_ = static_cast<uint32_t>(aircraftAPI_->getAll().size());
+
+    aircraftTracked_ = 0;
+    std::vector<ControllerData::ControllerDataModel> controllerDatas = controllerDataAPI_->getAll();
+    for (const auto& controllerData : controllerDatas) {
+        if (controllerData.attentionState == ControllerData::AttentionState::Assumed) {
+            ++aircraftTracked_;
+            ++totalTracks_;
+        }
+        else if (controllerData.ownedByMe) {
+            ++aircraftTracked_;
+            ++totalTracks_;
+        }
+    }
 }
 
 void NeoRPC::runUpdate() {
@@ -132,6 +170,8 @@ void NeoRPC::runUpdate() {
 }
 
 void NeoRPC::OnTimer(int Counter) {
+    if (Counter % 10 == 0) // Every 5 seconds
+        updateData();
     this->runUpdate();
 }
 
