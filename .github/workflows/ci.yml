@@ -107,8 +107,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NeoVSID-${{ matrix.platform }}-${{ matrix.architecture }}
+          name: NeoRPC-${{ matrix.platform }}-${{ matrix.architecture }}
           path: |
-            lib/NeoRPC*
-            bin/NeoRPC*
-            bin/${{ env.build_type }}/NeoRPC*
+            build/lib/NeoRPC*
+            build/bin/NeoRPC*
+            build/bin/${{ env.build_type }}/NeoRPC*
