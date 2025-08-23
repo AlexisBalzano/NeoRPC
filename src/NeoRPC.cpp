@@ -109,13 +109,19 @@ void rpc::NeoRPC::updatePresence()
         rpc.getPresence().setSmallImageKey("");
     }
 
+    if (isOnFire_) {
+        rpc.getPresence().setLargeImageKey("fire1");
+    }
+    else {
+        rpc.getPresence().setLargeImageKey("main");
+    }
+
     rpc.getPresence()
         .setState(state)
         .setActivityType(discord::ActivityType::Game)
         .setStatusDisplayType(discord::StatusDisplayType::Name)
         .setDetails(controller)
         .setStartTimestamp(StartTime)
-        .setLargeImageKey("main")
         .setLargeImageText("French vACC")
         .setSmallImageText("Total Tracks: " + std::to_string(totalTracks_))
         .setInstance(true)
@@ -131,6 +137,7 @@ void rpc::NeoRPC::updateData()
 
     auto connectionData = fsdAPI_->getConnection();
     if (connectionData) {
+		StartTime = std::time(nullptr); // Reset uptime on connection change
         if (connectionData->facility != Fsd::NetworkFacility::OBS) {
             isControllerATC_ = true;
             isObserver_ = false;
@@ -162,6 +169,9 @@ void rpc::NeoRPC::updateData()
             ++totalTracks_;
         }
     }
+
+    isOnFire_ = false;
+	if (std::time(nullptr) - StartTime > 3600) isOnFire_ = true; // on fire after 1 hour of uptime
 }
 
 void NeoRPC::runUpdate() {
@@ -182,7 +192,7 @@ void NeoRPC::run() {
 
     while (true) {
         counter += 1;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         if (true == this->m_stop) {
             discord::RPCManager::get().shutdown();

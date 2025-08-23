@@ -77,6 +77,7 @@ namespace rpc {
 
 		bool isControllerATC_ = false;
 		bool isObserver_ = false;
+        bool isOnFire_ = false;
         std::string currentController_ = "";
         std::string currentFrequency_ = "";
         
