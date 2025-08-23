@@ -104,17 +104,13 @@ void rpc::NeoRPC::updatePresence()
         return;
     }
 
-    std::string controller;
-	std::string state;
+    std::string controller = "Looking for traffic";
+	std::string state = "Idling";
 
     if (isControllerATC_) {
         state = "Aircraft tracked: (" + std::to_string(aircraftTracked_) + " of " + std::to_string(totalTracks_) + ")";
         controller = "Controlling " + currentController_ + " " + currentFrequency_;
         rpc.getPresence().setSmallImageKey("radarlogo");
-    }
-    else {
-        state = "Idling";
-        controller = "Looking for traffic";
     }
 
     rpc.getPresence()
