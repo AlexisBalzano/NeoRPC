@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "SDK.h"
-#include "core/NeoVSIDCommandProvider.h"
+#include "core/NeoRPCCommandProvider.h"
 
 using namespace PluginSDK;
 
