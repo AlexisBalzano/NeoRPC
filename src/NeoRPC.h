@@ -17,7 +17,7 @@ namespace rpc {
     static bool SendPresence = true;
 
 	constexpr uint32_t ONFIRE_THRESHOLD = 10;
-	constexpr uint32_t GOLDEN_THRESHOLD = 3600; // 1 hour
+	constexpr uint32_t HOUR_THRESHOLD = 7200; // 2 hour
 
     class NeoRPCCommandProvider;
 
@@ -83,6 +83,7 @@ namespace rpc {
 		bool isControllerATC_ = false;
 		bool isObserver_ = false;
         bool isOnFire_ = false;
+		bool isSilver_ = false;
         bool isGolden_ = false;
         std::string currentController_ = "";
         std::string currentFrequency_ = "";

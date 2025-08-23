@@ -141,30 +141,39 @@ void rpc::NeoRPC::updatePresence()
         rpc.getPresence().setSmallImageKey("");
     }
 
+    std::string imageKey = "";
+	std::string imageText = "";
+
     if (isGolden_ && isOnFire_) {
         rpc.getPresence()
             .setLargeImageKey("both")
             .setLargeImageText(std::to_string(onlineTime_) + " hour streak, On Fire!");
     }
-    else if (isGolden_) {
-        rpc.getPresence()
-            .setLargeImageKey("gold1")
-            .setLargeImageText("On a " + std::to_string(onlineTime_) + " hour streak");
-    }
-    else if (isOnFire_) {
-        rpc.getPresence()
-            .setLargeImageKey("fire1")
-            .setLargeImageText("On Fire! (Tracking " + std::to_string(aircraftTracked_) + " aircrafts)");
+
+    if (isSilver_) {
+        imageKey = "silver";
+        imageText = "On a " + std::to_string(onlineTime_) + " hour streak";
 	}
-    else {
-        rpc.getPresence()
-            .setLargeImageKey("main")
-            .setLargeImageText("French vACC");
+
+    if (isGolden_) {
+        imageKey = "gold";
+        imageText = "On a " + std::to_string(onlineTime_) + " hour streak";
     }
+
+    if (isOnFire_) {
+        imageKey += "fire";
+        if (!imageText.empty()) imageText += " ";
+        imageText += "On Fire!";
+	}
+
+    if (imageKey.empty()) imageKey = "main";
+	if (imageText.empty()) imageText = "French VACC";
 
 
     rpc.getPresence()
         .setState(state)
+		.setLargeImageKey(imageKey)
+		.setLargeImageText(imageText)
         .setActivityType(discord::ActivityType::Game)
         .setStatusDisplayType(discord::StatusDisplayType::Name)
         .setDetails(controller)
@@ -213,7 +222,8 @@ void rpc::NeoRPC::updateData()
         }
     }
 
-	isGolden_ = (std::time(nullptr) - StartTime > GOLDEN_THRESHOLD); // golden after 1 hour of uptime
+	isSilver_ = (std::time(nullptr) - StartTime > HOUR_THRESHOLD);
+	isGolden_ = (std::time(nullptr) - StartTime > 2 * HOUR_THRESHOLD);
 	onlineTime_ = static_cast<int>((std::time(nullptr) - StartTime) / 3600); // in hours
     isOnFire_ = (aircraftTracked_ >= ONFIRE_THRESHOLD);
 }
