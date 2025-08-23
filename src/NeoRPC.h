@@ -61,6 +61,7 @@ namespace rpc {
 
     private:
         void discordSetup();
+        void changeIdlingText();
 		void updatePresence();
 		void updateData();
         void runUpdate();
@@ -85,6 +86,7 @@ namespace rpc {
         bool isGolden_ = false;
         std::string currentController_ = "";
         std::string currentFrequency_ = "";
+		std::string idlingText_ = "Watching the skies";
 		int onlineTime_ = 0; // in hours
 		std::unordered_set<std::string> trackedCallsigns_;
         

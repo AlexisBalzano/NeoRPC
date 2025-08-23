@@ -1,6 +1,7 @@
 #include "NeoRPC.h"
 #include <numeric>
 #include <chrono>
+#include <random>
 
 #include "Version.h"
 #include "core/CompileCommands.h"
@@ -85,6 +86,33 @@ void rpc::NeoRPC::discordSetup()
             });
 }
 
+void rpc::NeoRPC::changeIdlingText()
+{
+    static constexpr std::array<std::string_view, 17> idlingTexts = {
+        "Waiting for traffic",
+        "Monitoring frequencies",
+        "Ready to assist",
+        "Standing by",
+        "Watching the skies",
+        "Keeping an eye out",
+        "Listening to ATC chatter",
+        "Scanning for aircraft",
+        "On duty",
+        "Awaiting calls",
+        "Tracking airspace",
+        "Maintaining watch",
+        "Observing traffic flow",
+        "Quiet skies",
+        "Monitoring silence",
+        "Awaiting handoffs",
+        "Recording ATIS"
+    };
+    static thread_local std::mt19937 rng{ std::random_device{}() };
+    std::uniform_int_distribution<size_t> dist(0, idlingTexts.size() - 1);
+
+    idlingText_ = std::string(idlingTexts[dist(rng)]);
+}
+
 void rpc::NeoRPC::updatePresence()
 {
     auto& rpc = discord::RPCManager::get();
@@ -93,7 +121,7 @@ void rpc::NeoRPC::updatePresence()
         return;
     }
 
-    std::string controller = "Looking for traffic";
+    std::string controller = idlingText_;
 	std::string state = "Idling";
 
     if (isControllerATC_) {
@@ -191,8 +219,10 @@ void NeoRPC::runUpdate() {
 }
 
 void NeoRPC::OnTimer(int Counter) {
-    if (Counter % 10 == 0) // Every 5 seconds
+    if (Counter % 5 == 0) // Every 5 seconds
         updateData();
+    if (Counter % 15 == 0) // Every 15 seconds
+        changeIdlingText();
     this->runUpdate();
 }
 
