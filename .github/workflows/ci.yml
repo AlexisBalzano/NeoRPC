@@ -109,6 +109,6 @@ jobs:
         with:
           name: NeoVSID-${{ matrix.platform }}-${{ matrix.architecture }}
           path: |
-            lib/NeoVSID*
-            bin/NeoVSID*
-            bin/${{ env.build_type }}/NeoVSID*
+            lib/NeoRPC*
+            bin/NeoRPC*
+            bin/${{ env.build_type }}/NeoRPC*
