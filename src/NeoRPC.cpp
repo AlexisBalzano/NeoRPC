@@ -108,7 +108,7 @@ void rpc::NeoRPC::updatePresence()
 	std::string state = "Idling";
 
     if (isControllerATC_) {
-        state = "Aircraft tracked: (" + std::to_string(aircraftTracked_) + " of " + std::to_string(totalTracks_) + ")";
+        state = "Aircraft tracked: (" + std::to_string(aircraftTracked_) + " of " + std::to_string(totalAircrafts_) + ")";
         controller = "Controlling " + currentController_ + " " + currentFrequency_;
         rpc.getPresence().setSmallImageKey("radarlogo");
     }

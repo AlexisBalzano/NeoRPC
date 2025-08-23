@@ -85,7 +85,7 @@ namespace rpc {
         std::string currentFrequency_ = "134.475";
         
 		uint32_t totalTracks_ = 25;
-		uint32_t totalFlightplans_ = 8;
+		uint32_t totalAircrafts_ = 8;
 		uint32_t aircraftTracked_ = 2;
 
         // APIs
