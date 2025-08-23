@@ -2,6 +2,7 @@
 #include <memory>
 #include <thread>
 #include <vector>
+#include <unordered_set>
 
 #include <discord-rpc.hpp>
 #include "SDK.h"
@@ -15,7 +16,7 @@ namespace rpc {
     static int64_t StartTime;
     static bool SendPresence = true;
 
-	constexpr uint32_t ONFIRE_THRESHOLD = 9;
+	constexpr uint32_t ONFIRE_THRESHOLD = 10;
 	constexpr uint32_t GOLDEN_THRESHOLD = 3600; // 1 hour
 
     class NeoRPCCommandProvider;
@@ -85,6 +86,7 @@ namespace rpc {
         std::string currentController_ = "";
         std::string currentFrequency_ = "";
 		int onlineTime_ = 0; // in hours
+		std::unordered_set<std::string> trackedCallsigns_;
         
 		uint32_t totalTracks_ = 0;
 		uint32_t totalAircrafts_ = 0;

@@ -175,13 +175,15 @@ void rpc::NeoRPC::updateData()
     for (const auto& controllerData : controllerDatas) {
         if (controllerData.ownedByMe) {
             ++aircraftTracked_;
-            //++totalTracks_;
+            if (trackedCallsigns_.insert(controllerData.callsign).second) {
+                ++totalTracks_;
+            }
         }
     }
 
 	isGolden_ = (std::time(nullptr) - StartTime > GOLDEN_THRESHOLD); // golden after 1 hour of uptime
 	onlineTime_ = static_cast<int>((std::time(nullptr) - StartTime) / 3600); // in hours
-    isOnFire_ = (aircraftTracked_ > ONFIRE_THRESHOLD);
+    isOnFire_ = (aircraftTracked_ >= ONFIRE_THRESHOLD);
 }
 
 void NeoRPC::runUpdate() {
