@@ -126,13 +126,13 @@ void rpc::NeoRPC::updatePresence()
         .refresh();
 }
 
-void NeoRPC::runScopeUpdate() {
+void NeoRPC::runUpdate() {
 	LOG_DEBUG(Logger::LogLevel::Info, "Running scope update.");
 	this->updatePresence();
 }
 
 void NeoRPC::OnTimer(int Counter) {
-    this->runScopeUpdate();
+    this->runUpdate();
 }
 
 void rpc::NeoRPC::OnControllerDataUpdated(const ControllerData::ControllerDataUpdatedEvent* event)

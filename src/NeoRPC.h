@@ -64,7 +64,7 @@ namespace rpc {
     private:
         void discordSetup();
 		void updatePresence();
-        void runScopeUpdate();
+        void runUpdate();
         void run();
 
     public:
