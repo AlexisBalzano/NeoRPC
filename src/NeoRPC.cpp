@@ -99,7 +99,7 @@ void rpc::NeoRPC::changeIdlingText()
         "Scanning for aircraft",
         "Awaiting calls",
         "Tracking airspace",
-        "Possible pilot deviation,...",
+        "Possible pilot deviation, I have a number...",
         "Clearing ILS 22R",
         "Observing traffic flow",
         "Monitoring silence",
