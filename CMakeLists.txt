@@ -43,6 +43,7 @@ include_directories(
 )
 
 # Find external dependencies
+add_subdirectory(External/discord-presence)
 
 # Source files
 # To set after starting development
@@ -54,10 +55,7 @@ set(SOURCES
 # Define the plugin library
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
-#set_property(TARGET ${PROJECT_NAME}  PROPERTY CXX_STANDARD 20)
-
-# Link dependencies
-
+target_link_libraries(${PROJECT_NAME} PRIVATE discord-rpc)
 
 # Set output directory and properties
 set_target_properties(${PROJECT_NAME} PROPERTIES
