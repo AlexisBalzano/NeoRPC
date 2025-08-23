@@ -25,6 +25,13 @@ void NeoRPC::RegisterCommand() {
         definition.parameters.clear();
 
         helpCommandId_ = chatAPI_->registerCommand(definition.name, definition, CommandProvider_);
+
+        definition.name = "rpc toggle";
+        definition.description = "Toggle Discord Rich Presence";
+        definition.lastParameterHasSpaces = false;
+        definition.parameters.clear();
+
+        presenceCommandId_ = chatAPI_->registerCommand(definition.name, definition, CommandProvider_);
     }
     catch (const std::exception& ex)
     {
@@ -52,8 +59,17 @@ Chat::CommandResult NeoRPCCommandProvider::Execute( const std::string &commandId
 	}
     else if (commandId == neoRPC_->helpCommandId_)
     {
-        neoRPC_->DisplayMessage(".vsid version");
+        neoRPC_->DisplayMessage(".rpc version");
+        neoRPC_->DisplayMessage(".rpc toggle");
     }
+    else if (commandId == neoRPC_->presenceCommandId_)
+    {
+		bool currentPresence = neoRPC_->getPresence();
+		neoRPC_->setPresence(!currentPresence);
+		std::string status = (!currentPresence) ? "enabled" : "disabled";
+        neoRPC_->DisplayMessage("Discord Rich Presence " + status);
+        return { true, std::nullopt };
+	}
     else {
         std::string error = "Invalid command. Use .rpc <command> <param>";
         neoRPC_->DisplayMessage(error);

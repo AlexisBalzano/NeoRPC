@@ -3,12 +3,18 @@
 #include <thread>
 #include <vector>
 
+#include <discord-rpc.hpp>
 #include "SDK.h"
 #include "core/NeoRPCCommandProvider.h"
 
 using namespace PluginSDK;
 
+
 namespace rpc {
+    constexpr auto APPLICATION_ID = "345229890980937739";
+    static int64_t StartTime;
+    static bool SendPresence = true;
+
     class NeoRPCCommandProvider;
 
     class NeoRPC : public BasePlugin
@@ -49,7 +55,15 @@ namespace rpc {
         PluginSDK::ControllerData::ControllerDataAPI* GetControllerDataAPI() const { return controllerDataAPI_; }
 		Tag::TagInterface* GetTagInterface() const { return tagInterface_; }
 
+        // Getters
+		bool getPresence() const { return m_presence; }
+
+		// Setters
+		void setPresence(bool presence) { m_presence = presence; }
+
     private:
+        void discordSetup();
+		void updatePresence();
         void runScopeUpdate();
         void run();
 
@@ -57,12 +71,13 @@ namespace rpc {
         // Command IDs
         std::string helpCommandId_;
         std::string versionCommandId_;
-        
+        std::string presenceCommandId_;
 
     private:
         // Plugin state
         bool initialized_ = false;
         std::thread m_worker;
+		bool m_presence = true; // Send presence to Discord
         bool m_stop;
 
         // APIs
