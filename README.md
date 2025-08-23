@@ -9,8 +9,9 @@ Bring your ATC sessions to life with dynamic Discord status updates!
 
 - 🎲 **Idle Quotes**
   <br>
-  <img width="435" height="150" alt="Idle 1" src="https://github.com/user-attachments/assets/3bed7102-9c61-49b7-92f2-9890e06818f1" />
-  <img width="435" height="150" alt="Idle 2" src="https://github.com/user-attachments/assets/10884b00-301d-4760-8919-ae503336ca06" />
+  <img width="271" height="114" alt="Capture d'écran 2025-08-23 204255" src="https://github.com/user-attachments/assets/69e661e6-0a93-4a13-8c39-5cdecf1b4329" />
+  <img width="271" height="115" alt="image" src="https://github.com/user-attachments/assets/092c8686-57b6-472b-a4d7-a0a94dcb1fc2" />
+
 
 - 👀 **Observer Status**
   <br>
