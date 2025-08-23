@@ -51,6 +51,7 @@ void NeoRPC::Shutdown()
     {
         initialized_ = false;
         this->unegisterCommand();
+		trackedCallsigns_.clear();
         LOG_DEBUG(Logger::LogLevel::Info, "NeoRPC shutdown complete");
     }
 	m_stop = true;
