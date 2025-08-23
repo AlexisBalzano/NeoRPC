@@ -9,7 +9,7 @@
 using namespace PluginSDK;
 
 namespace rpc {
-    class NeoVSIDCommandProvider;
+    class NeoRPCCommandProvider;
 
     class NeoRPC : public BasePlugin
     {
@@ -36,7 +36,6 @@ namespace rpc {
         void OnTimer(int Counter);
 
         // Command handling
-        void TagProcessing(const std::string& callsign, const std::string& actionId, const std::string& userInput = "");
         void RegisterCommand();
         void unegisterCommand();
 
