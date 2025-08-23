@@ -30,8 +30,6 @@ void NeoRPC::Initialize(const PluginMetadata &metadata, CoreAPI *coreAPI, Client
     logger_ = &lcoreAPI->logger();
     tagInterface_ = lcoreAPI->tag().getInterface();
 	StartTime = time(nullptr);
-
-    DisplayMessage("Version " + std::string(PLUGIN_VERSION) + " loaded.", "Initialisation");
     
     try
     {
@@ -77,23 +75,14 @@ void rpc::NeoRPC::discordSetup()
     discord::RPCManager::get()
         .setClientID(APPLICATION_ID)
         .onReady([this](discord::User const& user) {
-            DisplayMessage("Discord: connected to user " + user.username + "#" + user.discriminator + " - " + user.id);
-        })
+        LOG_DEBUG(Logger::LogLevel::info, "Discord: connected to user " + user.username + "#" + user.discriminator + " - " + user.id);
+            })
         .onDisconnected([this](int errcode, std::string_view message) {
-            DisplayMessage("Discord: disconnected with error code " + std::to_string(errcode) + " - " + std::string(message));
-        })
+        LOG_DEBUG(Logger::LogLevel::info, "Discord: disconnected with error code " + std::to_string(errcode) + " - " + std::string(message));
+            })
         .onErrored([this](int errcode, std::string_view message) {
-            DisplayMessage("Discord: error with code " + std::to_string(errcode) + " - " + std::string(message));
-        })
-        .onJoinGame([this](std::string_view joinSecret) {
-            DisplayMessage("Discord: join game - " + std::string(joinSecret));
-        })
-        .onSpectateGame([this](std::string_view spectateSecret) {
-            DisplayMessage("Discord: spectate game - " + std::string(spectateSecret));
-        })
-        .onJoinRequest([this](discord::User const& user) {
-            DisplayMessage("Discord: join request from " + user.username + "#" + user.discriminator + " - " + user.id);
-        });
+        LOG_DEBUG(Logger::LogLevel::Error, "Discord: error with code " + std::to_string(errcode) + " - " + std::string(message));
+            });
 }
 
 void rpc::NeoRPC::updatePresence()
@@ -165,7 +154,6 @@ void rpc::NeoRPC::updateData()
 }
 
 void NeoRPC::runUpdate() {
-	LOG_DEBUG(Logger::LogLevel::Info, "Running scope update.");
 	this->updatePresence();
 }
 
