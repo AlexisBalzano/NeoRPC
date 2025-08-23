@@ -37,7 +37,7 @@ void NeoRPC::Initialize(const PluginMetadata &metadata, CoreAPI *coreAPI, Client
     {
         this->RegisterCommand();
         discordSetup();
-		discord::RPCManager::get().initialize();
+        discord::RPCManager::get().initialize();
 
         initialized_ = true;
     }
@@ -104,20 +104,20 @@ void rpc::NeoRPC::discordSetup()
 void rpc::NeoRPC::updatePresence()
 {
     auto& rpc = discord::RPCManager::get();
-    //if (!m_presence) {
-    //    rpc.clearPresence();
-    //    return;
-    //}
+    if (!m_presence) {
+        rpc.clearPresence();
+        return;
+    }
 
     rpc.getPresence()
-        .setState("West of House")
+        .setState("Idling")
         .setActivityType(discord::ActivityType::Game)
         .setStatusDisplayType(discord::StatusDisplayType::State)
         .setDetails("Testing")
         .setStartTimestamp(StartTime)
         .setEndTimestamp(time(nullptr) + 5 * 60)
-        .setLargeImageKey("canary-large")
-        .setSmallImageKey("ptb-small")
+        .setLargeImageKey("logo")
+        .setSmallImageKey("radarlogo")
         .setPartyID("party1234")
         .setPartySize(1)
         .setPartyMax(6)

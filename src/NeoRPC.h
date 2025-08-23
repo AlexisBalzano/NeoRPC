@@ -11,7 +11,7 @@ using namespace PluginSDK;
 
 
 namespace rpc {
-    constexpr auto APPLICATION_ID = "345229890980937739";
+    constexpr auto APPLICATION_ID = "1408567135428673546";
     static int64_t StartTime;
     static bool SendPresence = true;
 

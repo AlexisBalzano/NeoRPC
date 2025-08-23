@@ -45,6 +45,7 @@ inline void NeoRPC::unegisterCommand()
     {
         chatAPI_->unregisterCommand(versionCommandId_);
         chatAPI_->unregisterCommand(helpCommandId_);
+        chatAPI_->unregisterCommand(presenceCommandId_);
         CommandProvider_.reset();
 	}
 }
