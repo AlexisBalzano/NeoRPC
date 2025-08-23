@@ -1,10 +1,10 @@
-#include "NeoVSID.h"
+#include "NeoRPC.h"
 
 extern "C" PLUGIN_API PluginSDK::BasePlugin *CreatePluginInstance()
 {
     try
     {
-        return new vsid::NeoVSID();
+        return new rpc::NeoRPC();
     }
     catch (const std::exception &e)
     {

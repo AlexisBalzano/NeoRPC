@@ -2,13 +2,13 @@
 // clang-format off
 // prevents C2018 during compilation
 namespace {
-const char *PLUGIN_NAME{ "vSID" };
+const char *PLUGIN_NAME{ "NeoRPC" };
 #if DEV
 const char *PLUGIN_VERSION{ "@CMAKE_PROJECT_VERSION@-dev"};
 #else
 const char *PLUGIN_VERSION{ "@CMAKE_PROJECT_VERSION@" };
 #endif
-const char *PLUGIN_AUTHOR{ "vSID Team+vACC-FR" };
+const char *PLUGIN_AUTHOR{ "NeoRPC Team+vACC-FR" };
 const char *PLUGIN_LICENSE{ "GPLv3" };
 
 static constexpr std::uint8_t PLUGIN_VERSION_MAJOR = @CMAKE_PROJECT_VERSION_MAJOR@;

@@ -5,30 +5,17 @@
 
 #include "SDK.h"
 #include "core/NeoVSIDCommandProvider.h"
-#include "core/DataManager.h"
-
-constexpr double MAX_DISTANCE = 2.; //Max distance from origin airport for auto assigning SID/CFL/RWY
 
 using namespace PluginSDK;
 
-namespace vsid {
-
-    struct tagUpdateParam
-    {
-        std::string callsign;
-        Pilot pilot;
-        PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_;
-        Tag::TagInterface* tagInterface_;
-        std::string tagId_;
-    };
-
+namespace rpc {
     class NeoVSIDCommandProvider;
 
-    class NeoVSID : public BasePlugin
+    class NeoRPC : public BasePlugin
     {
     public:
-        NeoVSID();
-        ~NeoVSID();
+        NeoRPC();
+        ~NeoRPC();
 
 		// Plugin lifecycle methods
         void Initialize(const PluginMetadata& metadata, CoreAPI* coreAPI, ClientInformation info) override;
@@ -38,10 +25,7 @@ namespace vsid {
 
         // Radar commands
         void DisplayMessage(const std::string& message, const std::string& sender = "");
-		/* void SetSid(const std::string& callsign, const std::string& sid);
-           void SetCFL(const std::string& callsign, const std::string& cfl);
-		   void SetRunway(const std::string& callsign, const std::string& rwy);*/
-        
+		
         // Scope events
         void OnControllerDataUpdated(const ControllerData::ControllerDataUpdatedEvent* event) override;
         void OnAirportConfigurationsUpdated(const Airport::AirportConfigurationsUpdatedEvent* event) override;
@@ -65,40 +49,22 @@ namespace vsid {
         Fsd::FsdAPI* GetFsdAPI() const { return fsdAPI_; }
         PluginSDK::ControllerData::ControllerDataAPI* GetControllerDataAPI() const { return controllerDataAPI_; }
 		Tag::TagInterface* GetTagInterface() const { return tagInterface_; }
-        DataManager* GetDataManager() const { return dataManager_.get(); }
 
     private:
         void runScopeUpdate();
         void run();
-        std::pair<std::string, size_t> getRequestAndIndex(const std::string& callsign);
 
     public:
         // Command IDs
         std::string helpCommandId_;
         std::string versionCommandId_;
-        std::string autoModeCommandId_;
-        std::string airportsCommandId_;
-        std::string pilotsCommandId_;
-		std::string areasCommandId_;
-		std::string rulesCommandId_;
-        std::string resetCommandId_;
-        std::string removeCommandId_;
-        std::string positionCommandId_;
-        std::string areaCommandId_;
-        std::string ruleCommandId_;
-
+        
 
     private:
         // Plugin state
-        std::vector<std::string> callsignsScope;
-		std::mutex callsignsMutex;
         bool initialized_ = false;
-		bool autoModeState = true; // auto update every 5 seconds (should be true when standard ops)
         std::thread m_worker;
         bool m_stop;
-        std::vector<std::string> requestingClearance;
-        std::vector<std::string> requestingPush;
-        std::vector<std::string> requestingTaxi;
 
         // APIs
         PluginMetadata metadata_;
@@ -111,36 +77,7 @@ namespace vsid {
         PluginSDK::Logger::LoggerAPI* logger_ = nullptr;
         PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
         Tag::TagInterface* tagInterface_ = nullptr;
-        std::unique_ptr<DataManager> dataManager_;
         std::shared_ptr<NeoVSIDCommandProvider> CommandProvider_;
 
-        // Tag Items
-        void RegisterTagItems();
-        void RegisterTagActions();
-        void RegisterCommand();
-        void unegisterCommand();
-        void OnTagAction(const Tag::TagActionEvent* event) override;
-        void OnTagDropdownAction(const Tag::DropdownActionEvent* event) override;
-        void UpdateTagItems();
-        void UpdateTagItems(std::string Callsign);
-        void updateCFL(tagUpdateParam param);
-        void updateRWY(tagUpdateParam param);
-        void updateSID(tagUpdateParam param);
-        void updateAlert(const std::string& callsign);
-		void updateRequest(const std::string& callsign, const std::string& request);
-        void updateAllRequests();
-
-	    // TAG Items IDs
-		std::string cflId_;
-        std::string rwyId_;
-        std::string sidId_;
-		std::string alertsId_;
-        std::string requestId_;
-		std::string requestMenuId_;
-
-        // TAG Action IDs
-        std::string confirmRwyId_;
-        std::string confirmSidId_;
-        std::string confirmCFLId_;
     };
-} // namespace vsid
+} // namespace rpc
