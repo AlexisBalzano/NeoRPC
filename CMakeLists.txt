@@ -5,10 +5,6 @@ project(NeoRPC VERSION "0.1.0")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Force g++14 as g++13 does not implement some C++20 features
-if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(CMAKE_CXX_COMPILER "g++-14")
-endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     add_compile_definitions(DIR_SEPARATOR="\\\\")
