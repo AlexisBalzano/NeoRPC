@@ -109,12 +109,27 @@ void rpc::NeoRPC::updatePresence()
         rpc.getPresence().setSmallImageKey("");
     }
 
-    if (isOnFire_) {
-        rpc.getPresence().setLargeImageKey("fire1");
+    if (isGolden_ && isOnFire_) {
+        rpc.getPresence()
+            .setLargeImageKey("both")
+            .setLargeImageText(std::to_string(onlineTime_) + " hour streak, On Fire!");
     }
+    else if (isGolden_) {
+        rpc.getPresence()
+            .setLargeImageKey("gold1")
+            .setLargeImageText("On a " + std::to_string(onlineTime_) + " hour streak");
+    }
+    else if (isOnFire_) {
+        rpc.getPresence()
+            .setLargeImageKey("fire1")
+            .setLargeImageText("On Fire! (Tracking " + std::to_string(aircraftTracked_) + " aircrafts)");
+	}
     else {
-        rpc.getPresence().setLargeImageKey("main");
+        rpc.getPresence()
+            .setLargeImageKey("main")
+            .setLargeImageText("French vACC");
     }
+
 
     rpc.getPresence()
         .setState(state)
@@ -122,7 +137,6 @@ void rpc::NeoRPC::updatePresence()
         .setStatusDisplayType(discord::StatusDisplayType::Name)
         .setDetails(controller)
         .setStartTimestamp(StartTime)
-        .setLargeImageText("French vACC")
         .setSmallImageText("Total Tracks: " + std::to_string(totalTracks_))
         .setInstance(true)
         .refresh();
@@ -159,18 +173,15 @@ void rpc::NeoRPC::updateData()
     aircraftTracked_ = 0;
     std::vector<ControllerData::ControllerDataModel> controllerDatas = controllerDataAPI_->getAll();
     for (const auto& controllerData : controllerDatas) {
-        if (controllerData.attentionState == ControllerData::AttentionState::Assumed) {
+        if (controllerData.ownedByMe) {
             ++aircraftTracked_;
-            ++totalTracks_;
-        }
-        else if (controllerData.ownedByMe) {
-            ++aircraftTracked_;
-            ++totalTracks_;
+            //++totalTracks_;
         }
     }
 
-    isOnFire_ = false;
-	if (std::time(nullptr) - StartTime > 3600) isOnFire_ = true; // on fire after 1 hour of uptime
+	isGolden_ = (std::time(nullptr) - StartTime > GOLDEN_THRESHOLD); // golden after 1 hour of uptime
+	onlineTime_ = static_cast<int>((std::time(nullptr) - StartTime) / 3600); // in hours
+    isOnFire_ = (aircraftTracked_ > ONFIRE_THRESHOLD);
 }
 
 void NeoRPC::runUpdate() {

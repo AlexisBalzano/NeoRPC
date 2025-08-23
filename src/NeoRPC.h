@@ -15,6 +15,9 @@ namespace rpc {
     static int64_t StartTime;
     static bool SendPresence = true;
 
+	constexpr uint32_t ONFIRE_THRESHOLD = 9;
+	constexpr uint32_t GOLDEN_THRESHOLD = 3600; // 1 hour
+
     class NeoRPCCommandProvider;
 
     class NeoRPC : public BasePlugin
@@ -78,8 +81,10 @@ namespace rpc {
 		bool isControllerATC_ = false;
 		bool isObserver_ = false;
         bool isOnFire_ = false;
+        bool isGolden_ = false;
         std::string currentController_ = "";
         std::string currentFrequency_ = "";
+		int onlineTime_ = 0; // in hours
         
 		uint32_t totalTracks_ = 0;
 		uint32_t totalAircrafts_ = 0;
