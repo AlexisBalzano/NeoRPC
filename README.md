@@ -24,7 +24,9 @@ Bring your ATC sessions to life with dynamic Discord status updates!
 
 - 🔄 **Dynamic Display**
   <br>
-  <img width="329" height="140" alt="Dynamic" src="https://github.com/user-attachments/assets/b022a507-4675-47b4-8db0-e3370a6b4e3d" />
+  <img width="300" height="120" alt="Dynamic" src="https://github.com/user-attachments/assets/b022a507-4675-47b4-8db0-e3370a6b4e3d" />
+  <img width="288" height="121" alt="image" src="https://github.com/user-attachments/assets/787654ac-38d9-4bf2-be9a-11e6b0a185cf" />
+
 
 ---
 
