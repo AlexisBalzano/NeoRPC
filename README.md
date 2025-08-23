@@ -50,9 +50,3 @@ Pull requests and suggestions are welcome!
 Feel free to open an issue for bugs or feature requests.
 
 ---
-
-## 📄 License
-
-[MIT](LICENSE)
-
----
