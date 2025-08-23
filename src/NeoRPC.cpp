@@ -86,8 +86,10 @@ void rpc::NeoRPC::discordSetup()
             });
 }
 
-void rpc::NeoRPC::changeIdlingText(const int& counter)
+void rpc::NeoRPC::changeIdlingText()
 {
+    static int counter;
+	counter++;
     static constexpr std::array<std::string_view, 21> idlingTexts = {
         "Waiting for traffic",
         "Monitoring frequencies",
@@ -112,7 +114,7 @@ void rpc::NeoRPC::changeIdlingText(const int& counter)
         "Arguing that France is not on strike"
     };
 
-    idlingText_ = std::string(idlingTexts[counter % idlingTexts.size()-1]);
+    idlingText_ = std::string(idlingTexts[counter % idlingTexts.size()]);
 }
 
 void rpc::NeoRPC::updatePresence()
@@ -224,7 +226,7 @@ void NeoRPC::OnTimer(int Counter) {
     if (Counter % 5 == 0) // Every 5 seconds
         updateData();
     if (Counter % 15 == 0) // Every 15 seconds
-        changeIdlingText(Counter);
+        changeIdlingText();
     this->runUpdate();
 }
 
