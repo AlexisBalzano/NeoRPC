@@ -28,7 +28,11 @@ Bring your ATC sessions to life with dynamic Discord status updates!
 ---
 
 ## 🚀 Getting Started
-git clone https://github.com/AlexisBalzano/NeoRPC.git cd NeoRPC cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release cmake --build build
+`git clone https://github.com/AlexisBalzano/NeoRPC.git` <br>
+`cd NeoRPC`<br>
+`cmake -B build -G`<br>
+`Ninja -DCMAKE_BUILD_TYPE=Release`<br>
+`cmake --build build`
 
 ---
 
