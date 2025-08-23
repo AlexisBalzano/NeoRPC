@@ -29,12 +29,15 @@ void NeoRPC::Initialize(const PluginMetadata &metadata, CoreAPI *coreAPI, Client
     controllerDataAPI_ = &lcoreAPI->controllerData();
     logger_ = &lcoreAPI->logger();
     tagInterface_ = lcoreAPI->tag().getInterface();
+	StartTime = time(nullptr);
 
     DisplayMessage("Version " + std::string(PLUGIN_VERSION) + " loaded.", "Initialisation");
     
     try
     {
         this->RegisterCommand();
+        discordSetup();
+		discord::RPCManager::get().initialize();
 
         initialized_ = true;
     }
@@ -52,13 +55,13 @@ void NeoRPC::Shutdown()
     if (initialized_)
     {
         initialized_ = false;
+		discord::RPCManager::get().shutdown();
+        this->unegisterCommand();
         LOG_DEBUG(Logger::LogLevel::Info, "NeoRPC shutdown complete");
     }
 
     this->m_stop = true;
-    this->m_worker.join();
-
-    this->unegisterCommand();
+	if (m_worker.joinable()) this->m_worker.join();
 }
 
 void rpc::NeoRPC::Reset()
@@ -74,16 +77,68 @@ void NeoRPC::DisplayMessage(const std::string &message, const std::string &sende
     chatAPI_->sendClientMessage(textMessage);
 }
 
+void rpc::NeoRPC::discordSetup()
+{
+    discord::RPCManager::get()
+        .setClientID(APPLICATION_ID)
+        .onReady([this](discord::User const& user) {
+            DisplayMessage("Discord: connected to user " + user.username + "#" + user.discriminator + " - " + user.id);
+        })
+        .onDisconnected([this](int errcode, std::string_view message) {
+            DisplayMessage("Discord: disconnected with error code " + std::to_string(errcode) + " - " + std::string(message));
+        })
+        .onErrored([this](int errcode, std::string_view message) {
+            DisplayMessage("Discord: error with code " + std::to_string(errcode) + " - " + std::string(message));
+        })
+        .onJoinGame([this](std::string_view joinSecret) {
+            DisplayMessage("Discord: join game - " + std::string(joinSecret));
+        })
+        .onSpectateGame([this](std::string_view spectateSecret) {
+            DisplayMessage("Discord: spectate game - " + std::string(spectateSecret));
+        })
+        .onJoinRequest([this](discord::User const& user) {
+            DisplayMessage("Discord: join request from " + user.username + "#" + user.discriminator + " - " + user.id);
+        });
+}
+
+void rpc::NeoRPC::updatePresence()
+{
+    auto& rpc = discord::RPCManager::get();
+    //if (!m_presence) {
+    //    rpc.clearPresence();
+    //    return;
+    //}
+
+    rpc.getPresence()
+        .setState("West of House")
+        .setActivityType(discord::ActivityType::Game)
+        .setStatusDisplayType(discord::StatusDisplayType::State)
+        .setDetails("Testing")
+        .setStartTimestamp(StartTime)
+        .setEndTimestamp(time(nullptr) + 5 * 60)
+        .setLargeImageKey("canary-large")
+        .setSmallImageKey("ptb-small")
+        .setPartyID("party1234")
+        .setPartySize(1)
+        .setPartyMax(6)
+        .setPartyPrivacy(discord::PartyPrivacy::Public)
+        .setButton1("Click me!", "https://google.com/")
+        .setButton2("Dont click me!", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        .setInstance(false)
+        .refresh();
+}
+
 void NeoRPC::runScopeUpdate() {
 	LOG_DEBUG(Logger::LogLevel::Info, "Running scope update.");
+	this->updatePresence();
 }
 
 void NeoRPC::OnTimer(int Counter) {
-    if (Counter % 5 == 0) this->runScopeUpdate();
+    this->runScopeUpdate();
 }
 
 void rpc::NeoRPC::OnControllerDataUpdated(const ControllerData::ControllerDataUpdatedEvent* event)
-{
+{   
     if (!event || event->callsign.empty())
         return;
     std::optional<ControllerData::ControllerDataModel> controllerDataBlock = controllerDataAPI_->getByCallsign(event->callsign);
@@ -147,7 +202,7 @@ void NeoRPC::run() {
     int counter = 1;
     while (true) {
         counter += 1;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
         if (true == this->m_stop) return;
         
