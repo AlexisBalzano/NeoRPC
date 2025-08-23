@@ -83,23 +83,25 @@ jobs:
       - name: Configure CMake (Windows and Linux)
         if: matrix.os != 'macos-latest'
         shell: bash
-        env:
-          CC: gcc-14
-          CXX: g++-14
         run: |
-          cmake . -DPLUGIN_VERSION=${{ steps.compute_version.outputs.version }}
+          mkdir -p build
+          cd build
+          cmake .. -DPLUGIN_VERSION=${{ steps.compute_version.outputs.version }}
 
       - name: Configure CMake (MacOS)
         if: matrix.os == 'macos-latest'
         shell: bash
         run: |
-          cmake . -DPLUGIN_VERSION=${{ steps.compute_version.outputs.version }} -DCMAKE_APPLE_SILICON_PROCESSOR=${{ matrix.architecture }}
+          mkdir -p build
+          cd build
+          cmake .. -DPLUGIN_VERSION=${{ steps.compute_version.outputs.version }} -DCMAKE_APPLE_SILICON_PROCESSOR=${{ matrix.architecture }}
 
       - name: Build
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd build
           cmake --build . --config ${{ env.build_type }}
 
       - name: Upload artifact
