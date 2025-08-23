@@ -1,3 +1,6 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg.git
+[submodule "External/discord-presence"]
+	path = External/discord-presence
+	url = https://github.com/EclipseMenu/discord-presence.git
