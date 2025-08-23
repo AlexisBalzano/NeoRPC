@@ -101,6 +101,10 @@ void rpc::NeoRPC::updatePresence()
         controller = "Controlling " + currentController_ + " " + currentFrequency_;
         rpc.getPresence().setSmallImageKey("radarlogo");
     }
+    else if (isObserver_) {
+        state = "Aircraft in range: " + std::to_string(totalAircrafts_);
+        controller = "Observing as " + currentController_;
+    }
     else {
         rpc.getPresence().setSmallImageKey("");
     }
@@ -121,13 +125,20 @@ void rpc::NeoRPC::updatePresence()
 void rpc::NeoRPC::updateData()
 {
     isControllerATC_ = false;
+	isObserver_ = false;
     currentController_ = "";
     currentFrequency_ = "";
 
     auto connectionData = fsdAPI_->getConnection();
     if (connectionData) {
-        if (connectionData->facility != Fsd::NetworkFacility::OBS) isControllerATC_ = true;
-        else isControllerATC_ = false;
+        if (connectionData->facility != Fsd::NetworkFacility::OBS) {
+            isControllerATC_ = true;
+            isObserver_ = false;
+        }
+        else {
+            isControllerATC_ = false;
+            isObserver_ = true;
+        }
 
         currentController_ = connectionData->callsign;
         if (connectionData->frequencies.empty()) currentFrequency_ = "";
