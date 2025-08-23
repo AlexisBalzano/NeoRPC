@@ -175,67 +175,6 @@ void NeoRPC::OnTimer(int Counter) {
     this->runUpdate();
 }
 
-void rpc::NeoRPC::OnControllerDataUpdated(const ControllerData::ControllerDataUpdatedEvent* event)
-{   
-    if (!event || event->callsign.empty())
-        return;
-    std::optional<ControllerData::ControllerDataModel> controllerDataBlock = controllerDataAPI_->getByCallsign(event->callsign);
-    if (!controllerDataBlock.has_value()) return;
-    if (controllerDataBlock->groundStatus == ControllerData::GroundStatus::Dep) {
-        return;
-    }
-    else {
-
-    }
-}
-
-void NeoRPC::OnAirportConfigurationsUpdated(const Airport::AirportConfigurationsUpdatedEvent* event) {
-	LOG_DEBUG(Logger::LogLevel::Info, "Airport configurations updated.");
-}
-
-void rpc::NeoRPC::OnAircraftTemporaryAltitudeChanged(const ControllerData::AircraftTemporaryAltitudeChangedEvent* event)
-{
-    if (!event || event->callsign.empty())
-        return;
-
-	LOG_DEBUG(Logger::LogLevel::Info, "Temporary altitude changed for callsign: " + event->callsign);
-
-	std::optional<double> distanceFromOrigin = aircraftAPI_->getDistanceFromOrigin(event->callsign);
-	if (!distanceFromOrigin.has_value()) {
-		logger_->error("Failed to retrieve distance from origin for callsign: " + event->callsign);
-		return;
-	}
-}
-
-void rpc::NeoRPC::OnPositionUpdate(const Aircraft::PositionUpdateEvent* event)
-{
-    for (const auto& aircraft : event->aircrafts) {
-        if (aircraft.callsign.empty())
-            continue;
-	}
-}
-
-void rpc::NeoRPC::OnFlightplanUpdated(const Flightplan::FlightplanUpdatedEvent* event)
-{
-    if (!event || event->callsign.empty())
-        return;
-
-	LOG_DEBUG(Logger::LogLevel::Info, "Flightplan updated for callsign: " + event->callsign);
-
-	std::optional<double> distanceFromOrigin = aircraftAPI_->getDistanceFromOrigin(event->callsign);
-	if (!distanceFromOrigin.has_value()) {
-		logger_->error("Failed to retrieve distance from origin for callsign: " + event->callsign);
-		return;
-	}
-}
-
-
-void rpc::NeoRPC::OnFlightplanRemoved(const Flightplan::FlightplanRemovedEvent* event)
-{
-    if (!event || event->callsign.empty())
-        return;
-}
-
 void NeoRPC::run() {
     int counter = 1;
     discordSetup();
