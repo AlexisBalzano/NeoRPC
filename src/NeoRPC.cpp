@@ -89,7 +89,7 @@ void rpc::NeoRPC::discordSetup()
 
 void rpc::NeoRPC::changeIdlingText()
 {
-    static constexpr std::array<std::string_view, 19> idlingTexts = {
+    static constexpr std::array<std::string_view, 20> idlingTexts = {
         "Waiting for traffic",
         "Monitoring frequencies",
         "Checking FL5000 for conflicts",
@@ -109,7 +109,8 @@ void rpc::NeoRPC::changeIdlingText()
 		"Checking NOTAMs",
 		"Deleting SIDs from Flight Plans",
         "Answering radio check",
-        "Trying to contact UNICOM"
+        "Trying to contact UNICOM",
+        "Arguing that France is not on strike"
     };
     static thread_local std::mt19937 rng{ std::random_device{}() };
     std::uniform_int_distribution<size_t> dist(0, idlingTexts.size() - 1);
