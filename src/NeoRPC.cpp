@@ -94,7 +94,7 @@ void rpc::NeoRPC::changeIdlingText()
         "Waiting for traffic",
         "Monitoring frequencies",
         "Checking FL5000 for conflicts",
-        "Watching the skies",
+        "Clearing ISS for a low pass",
         "Searching for binoculars",
         "Listening to ATC chatter",
         "Scanning for aircraft",
