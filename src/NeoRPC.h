@@ -58,12 +58,9 @@ namespace rpc {
 		// API Accessors
         PluginSDK::Logger::LoggerAPI* GetLogger() const { return logger_; }
         Aircraft::AircraftAPI* GetAircraftAPI() const { return aircraftAPI_; }
-        Airport::AirportAPI* GetAirportAPI() const { return airportAPI_; }
         Chat::ChatAPI* GetChatAPI() const { return chatAPI_; }
-        Flightplan::FlightplanAPI* GetFlightplanAPI() const { return flightplanAPI_; }
         Fsd::FsdAPI* GetFsdAPI() const { return fsdAPI_; }
         PluginSDK::ControllerData::ControllerDataAPI* GetControllerDataAPI() const { return controllerDataAPI_; }
-		Tag::TagInterface* GetTagInterface() const { return tagInterface_; }
 
         // Getters
 		bool getPresence() const { return m_presence; }
@@ -109,14 +106,10 @@ namespace rpc {
         PluginMetadata metadata_;
         ClientInformation clientInfo_;
         Aircraft::AircraftAPI* aircraftAPI_ = nullptr;
-        Airport::AirportAPI* airportAPI_ = nullptr;
         Chat::ChatAPI* chatAPI_ = nullptr;
-        Flightplan::FlightplanAPI* flightplanAPI_ = nullptr;
         Fsd::FsdAPI* fsdAPI_ = nullptr;
         PluginSDK::Logger::LoggerAPI* logger_ = nullptr;
         PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
-        Tag::TagInterface* tagInterface_ = nullptr;
         std::shared_ptr<NeoRPCCommandProvider> CommandProvider_;
-
     };
 } // namespace rpc

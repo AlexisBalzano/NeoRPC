@@ -22,13 +22,10 @@ void NeoRPC::Initialize(const PluginMetadata &metadata, CoreAPI *coreAPI, Client
     clientInfo_ = info;
     CoreAPI *lcoreAPI = coreAPI;
     aircraftAPI_ = &lcoreAPI->aircraft();
-    airportAPI_ = &lcoreAPI->airport();
     chatAPI_ = &lcoreAPI->chat();
-    flightplanAPI_ = &lcoreAPI->flightplan();
     fsdAPI_ = &lcoreAPI->fsd();
     controllerDataAPI_ = &lcoreAPI->controllerData();
     logger_ = &lcoreAPI->logger();
-    tagInterface_ = lcoreAPI->tag().getInterface();
 	StartTime = time(nullptr);
     
     try
