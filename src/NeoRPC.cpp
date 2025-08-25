@@ -145,10 +145,6 @@ void rpc::NeoRPC::updatePresence()
 	std::string imageText = "";
     
     switch (tier_) {
-    case Tier::NONE:
-        imageKey = "main";
-        imageText = "French VACC";
-        break;
     case Tier::SILVER:
         imageKey = "silver";
         imageText = "On a " + std::to_string(onlineTime_) + " hour streak";
@@ -156,6 +152,11 @@ void rpc::NeoRPC::updatePresence()
     case Tier::GOLD:
         if (imageKey.empty()) imageKey = "gold";
         imageText = "On a " + std::to_string(onlineTime_) + " hour streak";
+        break;
+    case Tier::NONE:
+    default:
+        imageKey = "main";
+        imageText = "French VACC";
         break;
     }
 
