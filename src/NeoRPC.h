@@ -21,6 +21,18 @@ namespace rpc {
 
     class NeoRPCCommandProvider;
 
+    enum State {
+        IDLE = 0,
+        CONTROLLING,
+        OBSERVING
+    };
+
+    enum Tier {
+        NONE = 0,
+        SILVER,
+        GOLD
+    };
+
     class NeoRPC : public BasePlugin
     {
     public:
@@ -80,11 +92,9 @@ namespace rpc {
 		bool m_presence = true; // Send presence to Discord
 		std::thread m_thread;
 
-		bool isControllerATC_ = false;
-		bool isObserver_ = false;
+		int connectionType_ = State::IDLE;
+		int tier_ = Tier::NONE;
         bool isOnFire_ = false;
-		bool isSilver_ = false;
-        bool isGolden_ = false;
         std::string currentController_ = "";
         std::string currentFrequency_ = "";
 		std::string idlingText_ = "Watching the skies";

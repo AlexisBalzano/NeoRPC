@@ -128,43 +128,45 @@ void rpc::NeoRPC::updatePresence()
     std::string controller = idlingText_;
 	std::string state = "Idling";
 
-    if (isControllerATC_) {
-        state = "Aircraft tracked: (" + std::to_string(aircraftTracked_) + " of " + std::to_string(totalAircrafts_) + ")";
+    switch (connectionType_) {
+    case State::CONTROLLING:
         controller = "Controlling " + currentController_ + " " + currentFrequency_;
+        state = "Aircraft tracked: (" + std::to_string(aircraftTracked_) + " of " + std::to_string(totalAircrafts_) + ")";
         rpc.getPresence().setSmallImageKey("radarlogo");
-    }
-    else if (isObserver_) {
-        state = "Aircraft in range: " + std::to_string(totalAircrafts_);
+        break;
+    case State::OBSERVING:
         controller = "Observing as " + currentController_;
-    }
-    else {
+        state = "Aircraft in range: " + std::to_string(totalAircrafts_);
         rpc.getPresence().setSmallImageKey("");
+        break;
+    default:
+        rpc.getPresence().setSmallImageKey("");
+        break;
     }
 
     std::string imageKey = "";
 	std::string imageText = "";
-
-    if (isGolden_ && isOnFire_) {
-        rpc.getPresence()
-            .setLargeImageKey("both")
-            .setLargeImageText(std::to_string(onlineTime_) + " hour streak, On Fire!");
-    }
-
-    if (isSilver_) {
+    
+    switch (tier_) {
+    case Tier::NONE:
+        imageKey = "main";
+        imageText = "French VACC";
+        break;
+    case Tier::SILVER:
         imageKey = "silver";
         imageText = "On a " + std::to_string(onlineTime_) + " hour streak";
-	}
-
-    if (isGolden_) {
-        imageKey = "gold";
+        break;
+    case Tier::GOLD:
+        if (imageKey.empty()) imageKey = "gold";
         imageText = "On a " + std::to_string(onlineTime_) + " hour streak";
+        break;
     }
 
     if (isOnFire_) {
         imageKey += "fire";
         if (!imageText.empty()) imageText += " ";
         imageText += "On Fire!";
-	}
+    }
 
     if (imageKey.empty()) imageKey = "main";
 	if (imageText.empty()) imageText = "French VACC";
@@ -185,20 +187,16 @@ void rpc::NeoRPC::updatePresence()
 
 void rpc::NeoRPC::updateData()
 {
-    isControllerATC_ = false;
-	isObserver_ = false;
     currentController_ = "";
     currentFrequency_ = "";
 
     auto connectionData = fsdAPI_->getConnection();
     if (connectionData) {
         if (connectionData->facility != Fsd::NetworkFacility::OBS) {
-            isControllerATC_ = true;
-            isObserver_ = false;
+			connectionType_ = State::CONTROLLING;
         }
         else {
-            isControllerATC_ = false;
-            isObserver_ = true;
+			connectionType_ = State::OBSERVING;
         }
 
         currentController_ = connectionData->callsign;
@@ -222,8 +220,10 @@ void rpc::NeoRPC::updateData()
         }
     }
 
-	isSilver_ = (std::time(nullptr) - StartTime > HOUR_THRESHOLD);
-	isGolden_ = (std::time(nullptr) - StartTime > 2 * HOUR_THRESHOLD);
+	if (std::time(nullptr) - StartTime > 2 * HOUR_THRESHOLD) tier_ = Tier::GOLD;
+	else if (std::time(nullptr) - StartTime > HOUR_THRESHOLD) tier_ = Tier::SILVER;
+	else tier_ = Tier::NONE;
+
 	onlineTime_ = static_cast<int>((std::time(nullptr) - StartTime) / 3600); // in hours
     isOnFire_ = (aircraftTracked_ >= ONFIRE_THRESHOLD);
 }
