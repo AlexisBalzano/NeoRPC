@@ -128,7 +128,7 @@ void rpc::NeoRPC::updatePresence()
     switch (connectionType_) {
     case State::CONTROLLING:
         controller = "Controlling " + currentController_ + " " + currentFrequency_;
-        state = "Aircraft tracked: (" + std::to_string(aircraftTracked_) + " of " + std::to_string(totalAircrafts_) + ")";
+        state = "Aircraft tracked: " + std::to_string(aircraftTracked_) + " of " + std::to_string(totalAircrafts_);
         rpc.getPresence().setSmallImageKey("radarlogo");
         break;
     case State::OBSERVING:
