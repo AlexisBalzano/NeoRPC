@@ -31,19 +31,9 @@ Bring your ATC sessions to life with dynamic Discord status updates!
 ---
 
 ## 🚀 Getting Started
-`git clone https://github.com/AlexisBalzano/NeoRPC.git` <br>
-`cd NeoRPC`<br>
-`cmake -B build -G`<br>
-`Ninja -DCMAKE_BUILD_TYPE=Release`<br>
-`cmake --build build`
-
----
-
-## 🛠 Requirements
-
-- C++23 compiler
-- CMake >= 3.14 (tested with 3.31.6-msvc6)
-- Ninja build system
+- **Download** latest `release` <br>
+- **Place it** in `NeoRadar/Plugin` directory<br>
+- **Load** the plugin inside NeoRadar
 
 ---
 
