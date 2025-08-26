@@ -187,6 +187,7 @@ void rpc::NeoRPC::updateData()
 {
     currentController_ = "";
     currentFrequency_ = "";
+	connectionType_ = State::IDLE;
 
     auto connectionData = fsdAPI_->getConnection();
     if (connectionData) {
