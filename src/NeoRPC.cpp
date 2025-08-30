@@ -1,7 +1,6 @@
 #include "NeoRPC.h"
 #include <numeric>
 #include <chrono>
-#include <algorithm>
 
 #include "Version.h"
 #include "core/CompileCommands.h"
@@ -204,7 +203,6 @@ void rpc::NeoRPC::updateData()
         else {
 			std::string freq = std::to_string(connectionData->frequencies[0]);
 			currentFrequency_ = freq.substr(0, freq.length() - 6) + "." + freq.substr(freq.length() - 6, 3);
-			std::transform(currentFrequency_.begin(), currentFrequency_.end(), currentFrequency_.begin(), ::toupper);
         }
     }
 
