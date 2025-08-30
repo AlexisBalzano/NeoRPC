@@ -199,6 +199,7 @@ void rpc::NeoRPC::updateData()
         }
 
         currentController_ = connectionData->callsign;
+		std::transform(currentController_.begin(), currentController_.end(), currentController_.begin(), ::toupper);
         if (connectionData->frequencies.empty()) currentFrequency_ = "";
         else {
 			std::string freq = std::to_string(connectionData->frequencies[0]);
