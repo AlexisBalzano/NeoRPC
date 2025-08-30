@@ -74,10 +74,10 @@ void rpc::NeoRPC::discordSetup()
     discord::RPCManager::get()
         .setClientID(APPLICATION_ID)
         .onReady([this](discord::User const& user) {
-        LOG_DEBUG(Logger::LogLevel::info, "Discord: connected to user " + user.username + "#" + user.discriminator + " - " + user.id);
+        LOG_DEBUG(Logger::LogLevel::Info, "Discord: connected to user " + user.username + "#" + user.discriminator + " - " + user.id);
             })
         .onDisconnected([this](int errcode, std::string_view message) {
-        LOG_DEBUG(Logger::LogLevel::info, "Discord: disconnected with error code " + std::to_string(errcode) + " - " + std::string(message));
+        LOG_DEBUG(Logger::LogLevel::Info, "Discord: disconnected with error code " + std::to_string(errcode) + " - " + std::string(message));
             })
         .onErrored([this](int errcode, std::string_view message) {
         LOG_DEBUG(Logger::LogLevel::Error, "Discord: error with code " + std::to_string(errcode) + " - " + std::string(message));
