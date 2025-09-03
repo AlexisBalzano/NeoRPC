@@ -1,5 +1,6 @@
 #pragma once
-#include "SDK.h"
+#include <NeoRadarSDK/SDK.h>
+
 #include "NeoRPC.h"
 
 using namespace PluginSDK;
