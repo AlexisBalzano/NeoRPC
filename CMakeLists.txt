@@ -31,10 +31,11 @@ if (DEBUG)
     message(STATUS "DEBUG mode enabled")
 endif()
 
+add_subdirectory(External/NeoRadarSDK)
+
 # Add SDK include directory
 include_directories(
     ${CMAKE_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/sdk
     ${CMAKE_SOURCE_DIR}/src
 )
 
@@ -51,7 +52,10 @@ set(SOURCES
 # Define the plugin library
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE discord-rpc)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    NeoRadarSDK::NeoRadarSDK
+    discord-rpc
+)
 
 # Set output directory and properties
 set_target_properties(${PROJECT_NAME} PROPERTIES

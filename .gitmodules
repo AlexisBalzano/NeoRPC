@@ -4,3 +4,6 @@
 [submodule "External/discord-presence"]
 	path = External/discord-presence
 	url = https://github.com/EclipseMenu/discord-presence.git
+[submodule "External/NeoRadarSDK"]
+	path = External/NeoRadarSDK
+	url = https://github.com/neoradar-project/sdk-cpp.git

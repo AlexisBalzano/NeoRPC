@@ -5,7 +5,7 @@
 #include <unordered_set>
 
 #include <discord-rpc.hpp>
-#include "SDK.h"
+#include "NeoRadarSDK/SDK.h"
 #include "core/NeoRPCCommandProvider.h"
 
 using namespace PluginSDK;
