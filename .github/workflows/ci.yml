@@ -82,7 +82,7 @@ jobs:
 
       - name : Install NeoRadar CLI
         run: |
-          npm install -g @neoradar/cli
+          npm install -g github:neoradar-project/cli
 
       - name: Configure CMake (Windows and Linux)
         if: matrix.os != 'macos-latest'
