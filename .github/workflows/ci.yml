@@ -80,6 +80,10 @@ jobs:
           brew update
           brew install utf8proc
 
+      - name : Install NeoRadar CLI
+        run: |
+          npm install -g @neoradar/cli
+
       - name: Configure CMake (Windows and Linux)
         if: matrix.os != 'macos-latest'
         shell: bash
