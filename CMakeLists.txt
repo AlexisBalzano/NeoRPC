@@ -71,3 +71,5 @@ if(${CMAKE_HOST_APPLE})
         OUTPUT_NAME ${PROJECT_NAME}-${CMAKE_HOST_SYSTEM_PROCESSOR}
     )
 endif()
+
+setup_complete_plugin_packaging(${PROJECT_NAME})
