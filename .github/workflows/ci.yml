@@ -123,6 +123,12 @@ jobs:
         with:
           path: all_builds
 
+      # - name: Prepare config files for packaging
+      #   run: |
+      #     mkdir -p all_builds/config
+      #     cp config.json all_builds/NeoRPC/
+      #     cp settings.yaml all_builds/config/
+
       - name: List downloaded files
         run: ls -R all_builds
 
@@ -130,7 +136,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: 'yarn'
 
       - name: Install NeoRadar CLI
         run: yarn global add https://github.com/neoradar-project/cli.git
