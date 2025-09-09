@@ -142,8 +142,7 @@ jobs:
 
       - name: Package .nrplugin
         run: |
-          # Adjust the following command to match your packaging process
-          neoradar-cli create-plugin-archives ./all_builds/**
+          neoradar-cli create-plugin-archives ./all_builds
 
       - name: Upload final .nrplugin
         uses: actions/upload-artifact@v4
