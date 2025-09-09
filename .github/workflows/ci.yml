@@ -156,4 +156,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: NeoRPC.nrplugin
-          path: ./all_builds/plugins/NeoRPC.nrplugin
+          path: plugins/NeoRPC.nrplugin
