@@ -148,6 +148,23 @@ jobs:
       - name: List files after organizing
         run: ls -R all_builds
 
+      - name: Rename binaries by platform and architecture
+        shell: bash
+        run: |
+          for f in all_builds/NeoRPC/*; do
+            case "$f" in
+              *.dll)
+                mv "$f" "all_builds/NeoRPC/windows-${{ matrix.architecture }}.dll"
+                ;;
+              *.so)
+                mv "$f" "all_builds/NeoRPC/linux-${{ matrix.architecture }}.so"
+                ;;
+              *.dylib)
+                mv "$f" "all_builds/NeoRPC/mac-${{ matrix.architecture }}.dylib"
+                ;;
+            esac
+          done
+
       - name: Package .nrplugin
         run: |
           echo y | neoradar-cli create-plugin-archives ./all_builds
