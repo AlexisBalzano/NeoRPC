@@ -123,12 +123,6 @@ jobs:
         with:
           path: all_builds
 
-      # - name: Prepare config files for packaging
-      #   run: |
-      #     mkdir -p all_builds/config
-      #     cp config.json all_builds/NeoRPC/
-      #     cp settings.yaml all_builds/config/
-
       - name: List downloaded files
         run: ls -R all_builds
 
