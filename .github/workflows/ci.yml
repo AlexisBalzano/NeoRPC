@@ -80,18 +80,6 @@ jobs:
           brew update
           brew install utf8proc
 
-      - name: Setup Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install NeoRadar CLI
-        run: |
-          git clone https://github.com/neoradar-project/cli.git
-          cd cli
-          npm install
-          npm link
-
       - name: Configure CMake (Windows and Linux)
         if: matrix.os != 'macos-latest'
         shell: bash
@@ -125,3 +113,29 @@ jobs:
             build/bin/NeoRPC*
             release/NeoRPC.nrplugin
             build/bin/${{ env.build_type }}/NeoRPC*
+
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all_builds
+
+      - name: List downloaded files
+        run: ls -R all_builds
+
+      - name: Install NeoRadar CLI
+        run: yarn global add https://github.com/neoradar-project/cli.git
+
+      - name: Package .nrplugin
+        run: |
+          # Adjust the following command to match your packaging process
+          neoradar-cli create-plugin-archives ./all_builds/**
+
+      - name: Upload final .nrplugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeoRPC.nrplugin
+          path: ./all_builds/plugins/NeoRPC.nrplugin
