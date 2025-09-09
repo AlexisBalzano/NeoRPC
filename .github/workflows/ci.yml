@@ -123,5 +123,5 @@ jobs:
           path: |
             build/lib/NeoRPC*
             build/bin/NeoRPC*
-            release/NeoRPC
+            release/NeoRPC.nrplugin
             build/bin/${{ env.build_type }}/NeoRPC*
