@@ -142,9 +142,8 @@ jobs:
 
       - name: Organize plugin binaries for packaging
         run: |
-          # Example: move all NeoRPC* files to all_builds/NeoRPC/
           mkdir -p all_builds/NeoRPC
-          find all_builds -type f -name 'NeoRPC*' -exec cp {} all_builds/NeoRPC/ \ ;
+          find all_builds -type f -name 'NeoRPC*' -exec cp {} all_builds/NeoRPC/ \;
 
       - name: List files after organizing
         run: ls -R all_builds
