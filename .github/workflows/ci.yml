@@ -140,6 +140,15 @@ jobs:
       - name: Install NeoRadar CLI
         run: yarn global add https://github.com/neoradar-project/cli.git
 
+      - name: Organize plugin binaries for packaging
+        run: |
+          # Example: move all NeoRPC* files to all_builds/NeoRPC/
+          mkdir -p all_builds/NeoRPC
+          find all_builds -type f -name 'NeoRPC*' -exec cp {} all_builds/NeoRPC/ \ ;
+
+      - name: List files after organizing
+        run: ls -R all_builds
+
       - name: Package .nrplugin
         run: |
           echo y | neoradar-cli create-plugin-archives ./all_builds
