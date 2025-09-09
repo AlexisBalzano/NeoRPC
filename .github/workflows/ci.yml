@@ -145,17 +145,23 @@ jobs:
       - name: Rename binaries by platform and architecture
         shell: bash
         run: |
-          for f in all_builds/NeoVSID/*; do
+          for f in all_builds/NeoRPC/*; do
+            ext="${f##*.}"
             base=$(basename "$f")
-            if [[ "$base" =~ NeoVSID-([a-z]+)-([a-zA-Z0-9_]+)\.(dll|so|dylib) ]]; then
-              platform="${BASH_REMATCH[1]}"
-              arch="${BASH_REMATCH[2]}"
-              ext="${BASH_REMATCH[3]}"
-              # Map Windows x86_64 to x64
-              if [[ "$platform" == "windows" && "$arch" == "x86_64" ]]; then
-                arch="x64"
+            # Detect platform and arch from the filename or from the file extension
+            if [[ "$base" == *"dylib" ]]; then
+              # macOS
+              if [[ "$base" == *"arm64"* ]]; then
+                mv "$f" "all_builds/NeoRPC/macos-arm64.dylib"
+              else
+                mv "$f" "all_builds/NeoRPC/macos-x64.dylib"
               fi
-              mv "$f" "all_builds/NeoVSID/${platform}-${arch}.${ext}"
+            elif [[ "$base" == *"so" ]]; then
+              # Linux
+              mv "$f" "all_builds/NeoRPC/linux-x64.so"
+            elif [[ "$base" == *"dll" ]]; then
+              # Windows
+              mv "$f" "all_builds/NeoRPC/windows-x64.dll"
             fi
           done
 
