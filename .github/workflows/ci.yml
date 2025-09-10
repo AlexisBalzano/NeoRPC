@@ -152,9 +152,9 @@ jobs:
             if [[ "$base" == *"dylib" ]]; then
               # macOS
               if [[ "$base" == *"arm64"* ]]; then
-                mv "$f" "all_builds/NeoRPC/macos-arm64.dylib"
+                mv "$f" "all_builds/NeoRPC/mac-arm64.dylib"
               else
-                mv "$f" "all_builds/NeoRPC/macos-x64.dylib"
+                mv "$f" "all_builds/NeoRPC/mac-x64.dylib"
               fi
             elif [[ "$base" == *"so" ]]; then
               # Linux
